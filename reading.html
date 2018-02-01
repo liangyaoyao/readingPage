@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv=”Content-Type” content=”text/html" charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <script src="./public/js/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+//          $("body").css("background",localStorage.bkcolor);
+            $(".m-read-content div").css("font-size",localStorage.sizefont+'px');
+            $(".sizefont").html(localStorage.sizefont)
+        })
+    </script>
+    <style type="text/css">
+        *{
+            padding:0;
+            margin:0;
+        }
+        html{
+            width:100%;
+            height:100%;
+            overflow-x:hidden;
+        }
+        .clear::after{
+        	content: '';
+        	display: block;
+        	height: 0;
+        	line-height: 0;
+        	visibility: hidden;
+        	clear: both;
+        }
+        #root{
+            float:left;
+        }
+        body{
+            text-align:left;
+            width:100%;
+            background:#e9dfc7;
+            height:100%;
+        }
+        .listcontainer{
+            width:80%;
+            display: block;
+            background-color: #e9dfc7;
+            height:100%;
+            position: fixed;
+            left:-150%;
+            top:0;
+            overflow: scroll;
+            z-index:25;
+            box-shadow: 4px -10px 80px 2px #000;
+        }
+        #list{
+            width:80%;
+            height:630px;
+            background-color: #eee;
+            /*background:url(/public/img/1-150109131S9.jpg);*/
+            /*background-size: cover;*/
+            box-shadow: 4px -10px 15px 2px #000;
+            z-index:25;
+            overflow-y:scroll;
+            scrollbar-face-color:#000;
+            color:#555;
+        }
+        .listcontainer h4{
+            font-size:15px;
+            letter-spacing: 5px;
+            padding:5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .listcontainer ul{
+            list-style:none;
+        }
+        .listcontainer li{
+            font-size:13px;
+            padding:5px;
+            margin:15px;
+        }
+        .listcontainer a{
+            display:block;
+            text-decoration: none;
+            font-family: '微软雅黑';
+            font-size: 15px;
+            transition: .5s;
+        }
+        .listcontainer a:hover{
+            color:#f0c040;
+
+            -moz-transform: translate(10px);
+        }
+
+        .m-read-content{
+            font-size: 14px;
+            color:#555;
+            line-height:31px;
+            padding:15px;
+        }
+        .m-read-content h4{
+            font-size:18px;
+            color:#736357;
+            border-bottom:solid 1px #736357;
+            letter-spacing: 2px;
+            margin:10px;
+        }
+        .m-read-content div{
+            text-indent: 2em;
+            margin:0.5em 0;
+            letter-spacing:0px;
+            line-height:24px;
+        }
+        .m-read-content p{
+            text-indent: 2em;
+            margin:0.5em 0;
+            letter-spacing:0px;
+            line-height:24px;
+        }
+        .u-tab{
+            list-style:none;
+            margin:10px auto;
+            height:34px;
+            line-height: 34px;
+            border-radius:8px;
+            border:1px solid #858382;
+            font-size:12px;
+            background:#000;
+            opacity: 0.8;
+
+        }
+        .u-tab li {
+            display: inline-block;
+            width: 48%;
+            text-align: center;
+            color: #fff;
+            z-index:20;
+        }
+        #pre_button{
+            border-right:1px solid #858382;
+            opacity:0.9;
+            z-index:20;
+        }
+        #pre_button a{
+            display: block;
+            color:#fff;
+            text-decoration: none;
+            font-size: 14px;
+            z-index:20;
+        }
+        #next_button a{
+            display: block;
+            color:#fff;
+            text-decoration: none;
+            font-size: 14px;
+            z-index:20;
+        }
+        .m-read-button{
+            width:80%;
+            max-width:800px;
+            margin:0 auto;
+            z-index:20;
+        }
+        .top-nav{
+            position: fixed;
+            top:0px;
+            height:50px;
+            width:100%;
+            z-index: 10;
+            background:#000;
+            opacity: 0.8;
+        }
+        .backlist{
+            cursor:pointer;
+        }
+        .icon-back{
+            width:15px;
+            height:15px;
+            position:absolute;
+            top:18px;
+            left:22px;
+            background:url(./public/img/icon-back.gif);
+            background-size: contain;
+            z-index: 10;
+        }
+        .nav-title{
+            color:#fff;
+            font-size:15px;
+            height:50px;
+            line-height: 50px;
+            text-align: left;
+            margin-left:42px;
+        }
+        .bottom-nav{
+            position: fixed;
+            bottom:0px;
+            height:50px;
+            width:100%;
+            background:#000;
+            z-index: 10;
+            opacity: 0.9;
+        }
+        .catalog-tab{
+            cursor: pointer;
+             position: absolute;
+            top:4px;
+            left:10%;
+        }
+        .icon-catalog{
+          
+            background:url(./public/img/catalog.gif);
+            width:25px;
+            height:25px;
+            background-size:contain;
+            z-index: 10;
+        }
+        .catalog{
+           /* position: absolute;
+            top:25px;
+            left:10%;*/
+            width: 30px;
+            height:30px;
+            font-size:12px;
+            color:#fff;
+        }
+        .font-tab{
+            cursor:pointer;
+            position: absolute;
+            top:4px;
+            left:50%;
+        }
+        .icon-font{
+            
+            margin-left:-9px;
+            font-size:23px ;
+            width:25px;
+            height:25px;
+            color:#fff;
+            z-index: 10;
+        }
+        .font{
+           /* position: absolute;
+            top:25px;
+            left:50%;*/
+            margin-left:-10px;
+            width: 30px;
+            height:50px;
+            font-size:12px;
+            color:#fff;
+        }
+        #dn-tab{
+        	position: absolute;
+        	top:4px;
+            right:5%;
+            width: 50px;
+            height: 50px;
+            display: block;
+        }
+        .day-tab{
+            display: block;
+            cursor:pointer;
+            /*position: absolute;
+            top:4px;
+            right:10%;*/
+
+        }
+        .icon-day{
+            /*position:absolute;
+            top:4px;
+            right:10%;*/
+            background:url(./public/img/sun15.png);
+            background-size: cover;
+            width:25px;
+            height:25px;
+
+        }
+        .day{
+            /*position: absolute;
+            top:25px;
+            right:10%;*/
+            font-size:12px;
+            color:#fff;
+            width: 30px;
+            height:50px;
+
+        }
+        .night-tab{
+            display: none;
+            /*position:absolute;
+            top:4px;
+            right:10%;*/
+        }
+        .icon-night{
+          
+            background:url(./public/img/night.gif);
+            background-size: cover;
+            width:25px;
+            height:25px;
+        }
+        .night{
+           
+            width: 30px;
+            height:50px;
+            font-size:12px;
+            color:#fff;
+        }
+        .nav-panel-bk{
+            position:fixed;
+            bottom:50px;
+            width:100%;
+            height:135px;
+            background:#000;
+            opacity:0.9;
+            z-index:16;
+            border-bottom:1px solid #fff;
+        }
+        .nav-panel{
+            position:fixed;
+            bottom:50px;
+            width:100%;
+            height:135px;
+            opacity:0.9;
+            z-index:16;
+            color:#fff;
+        }
+        .child-mod{
+            padding:5px 10px;
+            margin:15px;
+            position: relative;
+        }
+        .child-mod span{
+            display:inline-block;
+            padding-left:10px;
+            padding-right:20px;
+        }
+        .font-size-button{
+            background:none;
+            border:1px solid #fff;
+            color:#fff;
+            border-radius:10px;
+            padding:5px 25px;
+            cursor:pointer;
+        }
+        .sizefont{
+            float:right;
+            margin-right:5px;
+            margin-top:5px;
+            color:#ff6600;
+            font-size:13px;
+        }
+        .child-mod button:nth-child(2){
+            margin-right:10px;
+        }
+        .bk-container-current1{
+            width:25px;
+            height:25px;
+            border-radius:12px;
+            background:rgb(299,187,129);
+            display:inline-block;
+            vertical-align: -8px;
+            overflow: hidden;
+            margin-left:10px;
+            cursor:pointer;
+        }
+        .bk-container-current2{
+            width:25px;
+            height:25px;
+            border-radius:12px;
+            background:rgb(178,190,126);
+            display:inline-block;
+            margin-left:10px;
+            vertical-align: -8px;
+            cursor:pointer;
+        }
+        .bk-container-current3{
+            width:25px;
+            height:25px;
+            border-radius:12px;
+            background:rgb(217,104,49);
+            display:inline-block;
+            vertical-align: -8px;
+            margin-left:10px;
+            cursor:pointer;
+        }
+        .bk-container-current4{
+            width:25px;
+            height:25px;
+            border-radius:12px;
+            background:rgb(201,186,153);
+            display:inline-block;
+            margin-left:10px;
+            vertical-align: -8px;
+            cursor:pointer;
+        }
+        .bk-container-current5{
+            width:25px;
+            height:25px;
+            border-radius:12px;
+            background:rgb(227,160,93);
+            display:inline-block;
+            margin-left:10px;
+            vertical-align: -8px;
+            cursor:pointer;
+        }
+        .artical-action-mid{
+            position: fixed;
+            z-index: 15;
+            width:100%;
+            height:40%;
+            top:30%;
+        }
+    </style>
+</head>
+<body>
+<div class="listcontainer">
+        <ul>
+            <volist name="reta" id="vo">
+                <li><a href='/?m=home&c=read&a=reading&pid={$vo.pid}&artid={$vo.artid}'>{$vo.aticletit}</a></li>
+            </volist>
+        </ul>
+</div><!--目录层-->
+<div id="root" class="container">
+    <div class="artical-action-mid" id="action_mid"></div><!--中间模型，点击唤醒上下边栏-->
+    <div id="top_nav" class="top-nav" style="display: none">
+        <div class="backlist">
+            <a href="index.php?m=home&c=des&a=des&id={$result.pid}">
+             <div class="icon-back"></div>
+              <div class="nav-title">返回书架</div>
+            </a>
+        </div>
+    </div>
+    <!--字体弹出框-->
+    <div class="nav-panel-bk" style="display: none"></div>
+    <div class="nav-panel" id="font_container" style="display: none">
+        <div class="child-mod">
+            <span class="big">字号</span>
+            <button id="large_button" class="font-size-button">A+</button>
+            <button id="small_button" class="font-size-button">A-</button>
+            <div class="sizefont">14</div>
+        </div>
+        <div class="child-mod">
+            <span class="bk">背景</span>
+
+            <div class="bk-container-current1"></div>
+            <div class="bk-container-current2"></div>
+            <div class="bk-container-current3"></div>
+            <div class="bk-container-current4"></div>
+            <div class="bk-container-current5"></div>
+
+        </div>
+    </div><!--字体弹出框结束-->
+    <div id="bottom_nav" class="bottom-nav" style="display: none">
+        <div class="catalog-tab">
+            <div class="icon-catalog"></div>
+            <div class="catalog">目录</div>
+        </div>
+        <div class="font-tab">
+            <div class="icon-font">Aa</div>
+            <div class="font">设置</div>
+        </div>
+        <div  id="dn-tab" class="clear">
+            <div class="day-tab clear">
+                <div class="icon-day"></div>
+                <div class="day">白天</div>
+            </div>
+            <div class="night-tab clear">
+                <div class="icon-night"></div>
+                <div class="night">夜间</div>
+            </div>
+        </div>
+    </div>
+    <div id="fiction_chapter_title"></div>
+    <div id="fiction_container" class="m-read-content">
+        <h4>{$result.aticletit}</h4>
+        <!-- {$result.aticlecon} -->
+        爵迹
+而除了九域之外，北灵境内还有着一个不可忽视的强大势力，那便是北灵院，不过比起彼此纷争的九域而言，北灵院却是素来中立， 他们并没有争夺地盘的野心，只是固守一隅，吸纳学生，而正因为如此，反令得北灵院在北灵境地位愈发崇高。 而且，北灵院的手里，还掌握着晋入“五大院”的名额，这是最让得各域之主垂涎的东西， 因为他们都很明白，虽然他们在这北灵境地位不低，可与那“五大院”相比，却着实是有些不入眼，所以，为了能够获得这些名额，只要待得家中儿女年龄一到，便是会立即的送去北灵院修行。
+
+小女孩认真地皱起眉头，她轻轻地摇了摇头，用一种像是从遥远的空间传递过来的幽幽的声音，认真地说：“不是啊，我不是来和你们抢【冰貉】的。”说完她把目光转向窗外，此刻的窗外已经漆黑一片，片刻之前那轮巨大的如血残阳已经完全地沉进了地平线之下，冰凉的夜色此刻已经密密麻麻地涂遍了小镇的每一寸地面。整个福泽只剩下从各家房屋窗户透出的零星灯火。
+
+小女孩把视线从窗外转回来，看向托卡，脸上露出一丝不耐烦的神色。她目光空洞地看着托卡，说：“他们，就是他们呀。”然后停了停，说，“他们不是你。”说完把头转回来，盯着门外道路尽头，一动不动。“我不喜欢你问我问题，我刚刚就说了，我不喜欢吵闹的地方。”
+    </div>
+    <div class="m-read-button">
+        <ul class="u-tab">
+            <li id="pre_button"><a href='/?m=home&c=read&a=reading&pid={$result.pid}&artid={$artids-1}'>上一章</a></li>
+            <li id="next_button"><a href='/?m=home&c=read&a=reading&pid={$result.pid}&artid={$artids+1}'>下一章</a></li>
+        </ul>
+    </div>
+</div>
+
+<script src="./public/js/Home/reading.js"></script>
+
+</body>
+</html>
